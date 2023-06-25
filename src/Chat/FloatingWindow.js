@@ -1,9 +1,17 @@
 import {submit} from './ChatGPT.js'
 import {marked} from 'marked';
-
+import Screen from '../Experience/Screen.js'
+import Experience from '../Experience/Experience.js'
 export default class FloatingWindow {
-    constructor(model) {
+    constructor(model, world) {
+
+        const experience = Experience.instance;
+        if (!experience || !experience.world) {
+            throw new Error('Experience is not initialized or does not contain world');
+        }
+        this.experience = experience
         this.model = model;
+        this.world = experience.world;
         this.createWindow();
 
         // 创建显示返回内容的元素
@@ -52,6 +60,8 @@ export default class FloatingWindow {
             this.changeColorProperty(answer.message, 'uLightTvColor')
             this.changeColorProperty(answer.message, 'uLightPcColor')
             this.changeColorProperty(answer.message, 'uLightDeskColor')
+            this.changeScreenProperty(answer.message, 'pcScreen');
+            this.changeScreenProperty(answer.message, 'macScreen');
             // console.log(this.model.material.uniforms.uLightTvStrength.value);
         }
     }
@@ -61,7 +71,7 @@ export default class FloatingWindow {
         var match = content.match(regex);
         if (match) {
             let targetValue = parseFloat(match[1]);
-            console.log(targetValue);
+            // console.log(targetValue);
             if (!isNaN(targetValue)) {
                 let currentValue = this.model.material.uniforms[propertyName].value;
                 let step = (targetValue - currentValue) / 100; // 分100步完成过渡
@@ -93,7 +103,28 @@ export default class FloatingWindow {
             }
         }
     }
-    
+    changeScreenProperty(content, propertyName) {
+        var regex = new RegExp(propertyName + "：\\s*(\\d+)");
+        var match = content.match(regex);
+        if (match) {
+            let targetValue = parseInt(match[1]);
+            console.log(targetValue);
+            if (targetValue == 0) {
+                if(propertyName == 'pcScreen')
+                    this.world.pcScreen.stopVideo();
+                else if(propertyName == 'macScreen')
+                    this.world.macScreen.stopVideo();
+            }
+            else if (targetValue == 1) {
+                if(propertyName == 'pcScreen')
+                    this.world.pcScreen.changeVideoSource('/assets/videoPortfolio.mp4');
+                else if(propertyName == 'macScreen')
+                    this.world.macScreen.changeVideoSource('/assets/videoStream.mp4');
+
+            }
+        }
+    }
+
     createWindow() {
         this.window = document.createElement('div');
         this.window.style.position = 'fixed';

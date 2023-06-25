@@ -47,6 +47,36 @@ export default class Screen
         this.scene.add(this.model.mesh)
     }
 
+    changeVideoSource(newSourcePath) {
+        // Pause and remove the current video
+        this.model.element.pause();
+        this.model.element.src = '';
+        this.model.element.load();
+    
+        // Set up and play the new video
+        this.model.element.src = newSourcePath;
+        this.model.element.play();
+    
+        // Update the texture
+        this.model.texture.dispose();
+        this.model.texture = new THREE.VideoTexture(this.model.element);
+        this.model.material.map = this.model.texture;
+    }
+    
+    stopVideo() {
+        // Pause the current video
+        this.model.element.pause();
+    
+        // Remove the current video source
+        this.model.element.src = '';
+        this.model.element.load();
+    
+        // Clear the texture and material map
+        this.model.texture.dispose();
+        this.model.texture = null;
+        this.model.material.map = null;
+    }
+    
     update()
     {
         // this.model.group.rotation.y = Math.sin(this.time.elapsed * 0.0005) * 0.5

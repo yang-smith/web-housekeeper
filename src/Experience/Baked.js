@@ -9,7 +9,12 @@ export default class CoffeeSteam
 {
     constructor()
     {
-        this.experience = new Experience()
+        const experience = Experience.instance;
+        if (!experience || !experience.world) {
+            throw new Error('Experience is not initialized or does not contain world');
+        }
+        this.experience = experience
+        // this.experience = new Experience()
         this.resources = this.experience.resources
         this.debug = this.experience.debug
         this.scene = this.experience.scene
@@ -87,7 +92,7 @@ export default class CoffeeSteam
 
         this.scene.add(this.model.mesh)
         
-        this.floatingWindow = new FloatingWindow(this.model);
+        this.floatingWindow = new FloatingWindow(this.model, this.experience.world);
 
         // Debug
         if(this.debug)
