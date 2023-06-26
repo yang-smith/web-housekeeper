@@ -58,7 +58,9 @@ export default class Screen
         this.model.element.play();
     
         // Update the texture
-        this.model.texture.dispose();
+        if (this.model.texture) {
+            this.model.texture.dispose();
+        }
         this.model.texture = new THREE.VideoTexture(this.model.element);
         this.model.material.map = this.model.texture;
     }

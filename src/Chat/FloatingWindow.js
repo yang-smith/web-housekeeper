@@ -51,26 +51,32 @@ export default class FloatingWindow {
         const answer = await submit(question);
         console.log(answer);
         if (answer) {
-            // this.output.textContent = answer.message;
             this.output.innerHTML = marked(answer.message);
-            this.changeProperty(answer.message, 'uNightMix');
-            this.changeProperty(answer.message, 'uLightTvStrength');
-            this.changeProperty(answer.message, 'uLightPcStrength');
-            this.changeProperty(answer.message, 'uLightDeskStrength');
-            this.changeColorProperty(answer.message, 'uLightTvColor')
-            this.changeColorProperty(answer.message, 'uLightPcColor')
-            this.changeColorProperty(answer.message, 'uLightDeskColor')
-            this.changeScreenProperty(answer.message, 'pcScreen');
-            this.changeScreenProperty(answer.message, 'macScreen');
-            // console.log(this.model.material.uniforms.uLightTvStrength.value);
+            this.updateProperty(answer.message);
         }
     }
+    updateProperty(content) {
+        let jsonRegex = /状态：(\{[\s\S]*?\})/; // Regular expression to match the JSON part
+        let match = content.match(jsonRegex); 
 
-    changeProperty(content, propertyName) {
-        var regex = new RegExp(propertyName + "：\\s*(\\d+(\\.\\d+)?)");
-        var match = content.match(regex);
         if (match) {
-            let targetValue = parseFloat(match[1]);
+            let jsonString = match[1]; 
+            let jsonData = JSON.parse(jsonString); 
+            console.log(jsonData);
+            this.changeProperty(jsonData, 'uNightMix');
+            this.changeProperty(jsonData, 'uLightTvStrength');
+            this.changeProperty(jsonData, 'uLightPcStrength');
+            this.changeProperty(jsonData, 'uLightDeskStrength');
+            this.changeColorProperty(jsonData, 'uLightTvColor')
+            this.changeColorProperty(jsonData, 'uLightPcColor')
+            this.changeColorProperty(jsonData, 'uLightDeskColor')
+            this.changeScreenProperty(jsonData, 'pcScreen');
+            this.changeScreenProperty(jsonData, 'macScreen');
+        }
+    }
+    changeProperty(content, propertyName) {
+        if (propertyName in content) {
+            let targetValue = parseFloat(content[propertyName]);
             // console.log(targetValue);
             if (!isNaN(targetValue)) {
                 let currentValue = this.model.material.uniforms[propertyName].value;
@@ -88,26 +94,20 @@ export default class FloatingWindow {
         }
     }
     changeColorProperty(content, propertyName) {
-        var regex = new RegExp(propertyName + "：\\s*(#[0-9a-fA-F]{6})");
-        var match = content.match(regex);
-        if (match) {
-            let targetColor = match[1];
+        if (propertyName in content) {
+            let targetColor = content[propertyName];
             if (targetColor) {
                 // 将十六进制颜色值转换为RGB值
                 let r = parseInt(targetColor.slice(1, 3), 16) / 255;
                 let g = parseInt(targetColor.slice(3, 5), 16) / 255;
                 let b = parseInt(targetColor.slice(5, 7), 16) / 255;
-    
-                // 假设你的颜色属性是一个包含r, g, b属性的对象
                 this.model.material.uniforms[propertyName].value = { r, g, b };
             }
         }
     }
     changeScreenProperty(content, propertyName) {
-        var regex = new RegExp(propertyName + "：\\s*(\\d+)");
-        var match = content.match(regex);
-        if (match) {
-            let targetValue = parseInt(match[1]);
+        if (propertyName in content) {
+            let targetValue = parseFloat(content[propertyName]);
             console.log(targetValue);
             if (targetValue == 0) {
                 if(propertyName == 'pcScreen')
