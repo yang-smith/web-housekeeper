@@ -49,10 +49,21 @@ export default class FloatingWindow {
 
         // 调用API并显示返回的内容
         const answer = await submit(question);
-        console.log(answer);
+        console.log(answer.message);
         if (answer) {
-            this.output.innerHTML = marked(answer.message);
-            this.updateProperty(answer.message);
+            var regex = /####(.*?)####/g;  // 使用全局匹配标志 g
+            var string = answer.message;
+            var match;
+            var results = [];
+            while ((match = regex.exec(string)) !== null) {
+                results.push(match[1]);  // 将每一个匹配的内容推入结果数组中
+            }
+            if (results.length > 0) {
+                this.output.innerHTML = marked(results.join("\n    "));
+                this.updateProperty(answer.message);
+            }
+            else
+                this.output.innerHTML = marked("something error!!")
         }
     }
     updateProperty(content) {
@@ -108,7 +119,7 @@ export default class FloatingWindow {
     changeScreenProperty(content, propertyName) {
         if (propertyName in content) {
             let targetValue = parseFloat(content[propertyName]);
-            console.log(targetValue);
+            // console.log(targetValue);
             if (targetValue == 0) {
                 if(propertyName == 'pcScreen')
                     this.world.pcScreen.stopVideo();
