@@ -51,39 +51,29 @@ export default class FloatingWindow {
         const answer = await submit(question);
         console.log(answer.message);
         if (answer) {
-            var regex = /####(.*?)####/g;  // 使用全局匹配标志 g
-            var string = answer.message;
-            var match;
-            var results = [];
-            while ((match = regex.exec(string)) !== null) {
-                results.push(match[1]);  // 将每一个匹配的内容推入结果数组中
-            }
-            if (results.length > 0) {
-                this.output.innerHTML = marked(results.join("\n    "));
-                this.updateProperty(answer.message);
-            }
-            else
-                this.output.innerHTML = marked("something error!!")
+            this.showmessage(answer.message);
+            this.updateProperty(answer.message);
         }
     }
-    updateProperty(content) {
-        let jsonRegex = /状态：(\{[\s\S]*?\})/; // Regular expression to match the JSON part
-        let match = content.match(jsonRegex); 
+    showmessage(content) {
+        let jsonString = content; 
+        let jsonData = JSON.parse(jsonString); 
+        this.output.innerHTML = marked("回答："+jsonData["answer"]+"\n \n 行为：" + jsonData["action"]);
+    }
+    updateProperty(content) { 
+        let jsonString = content; 
+        let jsonData = JSON.parse(jsonString); 
+        console.log(jsonData);
+        this.changeProperty(jsonData, 'uNightMix');
+        this.changeProperty(jsonData, 'uLightTvStrength');
+        this.changeProperty(jsonData, 'uLightPcStrength');
+        this.changeProperty(jsonData, 'uLightDeskStrength');
+        this.changeColorProperty(jsonData, 'uLightTvColor')
+        this.changeColorProperty(jsonData, 'uLightPcColor')
+        this.changeColorProperty(jsonData, 'uLightDeskColor')
+        this.changeScreenProperty(jsonData, 'pcScreen');
+        this.changeScreenProperty(jsonData, 'macScreen');
 
-        if (match) {
-            let jsonString = match[1]; 
-            let jsonData = JSON.parse(jsonString); 
-            console.log(jsonData);
-            this.changeProperty(jsonData, 'uNightMix');
-            this.changeProperty(jsonData, 'uLightTvStrength');
-            this.changeProperty(jsonData, 'uLightPcStrength');
-            this.changeProperty(jsonData, 'uLightDeskStrength');
-            this.changeColorProperty(jsonData, 'uLightTvColor')
-            this.changeColorProperty(jsonData, 'uLightPcColor')
-            this.changeColorProperty(jsonData, 'uLightDeskColor')
-            this.changeScreenProperty(jsonData, 'pcScreen');
-            this.changeScreenProperty(jsonData, 'macScreen');
-        }
     }
     changeProperty(content, propertyName) {
         if (propertyName in content) {
