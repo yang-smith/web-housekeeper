@@ -22,6 +22,7 @@
     "marked": "^5.1.0",
     "mini-css-extract-plugin": "^2.1.0",
     "normalize-wheel": "^1.0.1",
+    "openai": "^3.3.0",
     "portfinder-sync": "0.0.2",
     "raw-loader": "^4.0.2",
     "stats.js": "^0.17.0",
