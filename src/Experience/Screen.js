@@ -78,7 +78,9 @@ export default class Screen
         this.model.texture = null;
         this.model.material.map = null;
     }
-    
+    isVideoPlaying() {
+        return !this.model.element.paused;
+    }
     update()
     {
         // this.model.group.rotation.y = Math.sin(this.time.elapsed * 0.0005) * 0.5

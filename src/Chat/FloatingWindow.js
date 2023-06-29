@@ -13,6 +13,7 @@ export default class FloatingWindow {
         this.model = model;
         this.world = experience.world;
         this.createWindow();
+        this.createCollapsibleWindow();
 
         // 创建显示返回内容的元素
         this.output = document.createElement('div');
@@ -44,11 +45,14 @@ export default class FloatingWindow {
     }
 
     async sendQuestion() {
-        const question = this.input.value;
+        var inputstr = "智能设备状态" + this.getAllDeviceStatus();
+        inputstr = inputstr + "。 额外信息：" + this.inputbase.textContent;
+        inputstr = inputstr + "。 主人说："+ this.input.value + "。请只输出json。";
         this.input.value = '';
-
+        console.log(inputstr);
+        console.log(this.getAllDeviceStatus());
         // 调用API并显示返回的内容
-        const answer = await submit(question);
+        const answer = await submit(inputstr);
         console.log(answer.message);
         if (answer) {
             this.showmessage(answer.message);
@@ -164,4 +168,74 @@ export default class FloatingWindow {
         // 将窗口添加到文档中
         document.body.appendChild(this.window);
     }
+    
+
+    createCollapsibleWindow() {
+        this.collapsible = document.createElement('div');
+        this.collapsible.style.position = 'fixed';
+        this.collapsible.style.top = '40px'; // 设置窗口在顶部
+        this.collapsible.style.left = '30px'; // 设置窗口在左侧
+        this.collapsible.style.zIndex = '1000'; // 确保窗口在其他元素之上
+        // this.collapsible.style.padding = '100px';
+        this.collapsible.style.backgroundColor = 'rgba(255, 255, 255, 0.5)'; // 设置半透明的背景色
+        this.collapsible.style.display = 'none'; // 初始时是折叠的
+        this.collapsible.style.width = '200px'; 
+        this.collapsible.style.height = '250px'; 
+
+        // 创建一个展开/折叠按钮
+        this.collapsibleButton = document.createElement('button');
+        this.collapsibleButton.style.position = 'fixed';
+        this.collapsibleButton.style.top = '10px'; 
+        this.collapsibleButton.style.left = '10px'; 
+        this.collapsibleButton.style.zIndex = '1000'; 
+        this.collapsibleButton.textContent = '个人信息 ↓';
+        this.collapsibleButton.addEventListener('click', () => {
+            if (this.collapsible.style.display === 'none') {
+                this.collapsible.style.display = 'block';
+                this.collapsibleButton.textContent = '个人信息 ↑';
+            } else {
+                this.collapsible.style.display = 'none';
+                this.collapsibleButton.textContent = '个人信息 ↓';
+            }
+        });
+
+        // 创建一个多行输入框
+        this.inputbase = document.createElement('textarea');
+        this.inputbase.style.width = '200px'; 
+        this.inputbase.style.height = '250px'; 
+        this.inputbase.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
+        this.inputbase.style.resize = 'none'; // 禁止调整大小
+        this.inputbase.textContent = '我是一个城市白领，我工作日每天八点起床，晚上一般11点睡觉。我工作需要使用电脑。';
+
+        // 将输入框添加到可折叠窗口中
+        this.collapsible.appendChild(this.inputbase);
+
+        // 将可折叠窗口和展开/折叠按钮添加到文档中
+        document.body.appendChild(this.collapsible);
+        document.body.appendChild(this.collapsibleButton);
+    }
+
+    getAllDeviceStatus() {
+        let status = {};
+        const deviceList = [
+            'uNightMix', 
+            'uLightTvStrength', 
+            'uLightPcStrength', 
+            'uLightDeskStrength', 
+            'uLightTvColor', 
+            'uLightPcColor', 
+            'uLightDeskColor', 
+            'pcScreen', 
+            'macScreen'
+        ];
+        for (let device of deviceList) {
+            if(this.model.material.uniforms[device]){
+                status[device] = this.model.material.uniforms[device].value;
+            }else if(device == 'pcScreen' || device == 'macScreen'){
+                status[device] = this.world[device].isVideoPlaying() ? 1 : 0;
+            }
+        }
+        return JSON.stringify(status);
+    }
+    
 }
