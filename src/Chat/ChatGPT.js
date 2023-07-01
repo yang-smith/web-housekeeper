@@ -47,14 +47,14 @@ macScreen：mac笔记本电脑状态，mac笔记本电脑放在电脑旁边，0�
 
 请通过如下步骤进行：
 1. 思考作为专业管家的answer。
-2. 检查所有智能设备，作为专业的管家，推导得出应该进行的action。
-3. 由上一步的行为推导出智能设备的状态，是一个确定的数值。
+2. 检查输入中智能设备的状态，作为专业的管家，推导得出应该进行的action。
+3. 由上一步的action推导出智能设备的状态，是一个确定的数值。
 4. 以json格式输出上面三个步骤的回答，包含以下键值：answer，action，以及上述的智能设备状态。
 answer：作为专业管家的回答，
 action：检查所有智能设备的状态，，
 各种智能设备状态：由action推导而来，是一个确定的数值。
 
-特别注意：你必须输出一个json对象，你必须只输出一个json对象。answer，action不能为空。
+
 
 比如我说：
 
@@ -82,7 +82,8 @@ action：检查所有智能设备的状态，，
 
 
 export async function submit(content) {
-    const apiUrl = "http://38.60.204.205:1200/api/chatmess";
+    // const apiUrl = "http://38.60.204.205:1200/api/chatmess";
+    const apiUrl = "https://vercel-serverless-housekeeper.vercel.app/api/chatmesg";
     const messages=[
         {"role": "system", "content": bcontent},
         {"role": "user", "content": content}

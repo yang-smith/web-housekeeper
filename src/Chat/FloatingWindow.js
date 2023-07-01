@@ -216,26 +216,28 @@ export default class FloatingWindow {
     }
 
     getAllDeviceStatus() {
-        let status = {};
-        const deviceList = [
-            'uNightMix', 
-            'uLightTvStrength', 
-            'uLightPcStrength', 
-            'uLightDeskStrength', 
-            'uLightTvColor', 
-            'uLightPcColor', 
-            'uLightDeskColor', 
-            'pcScreen', 
-            'macScreen'
-        ];
-        for (let device of deviceList) {
-            if(this.model.material.uniforms[device]){
-                status[device] = this.model.material.uniforms[device].value;
-            }else if(device == 'pcScreen' || device == 'macScreen'){
-                status[device] = this.world[device].isVideoPlaying() ? 1 : 0;
-            }
-        }
+        let status = {
+            "uNightMix": this.model.material.uniforms.uNightMix.value,
+            "uLightTvStrength": this.model.material.uniforms.uLightTvStrength.value,
+            "uLightPcStrength": this.model.material.uniforms.uLightPcStrength.value,
+            "uLightDeskStrength": this.model.material.uniforms.uLightDeskStrength.value,
+            "uLightTvColor": this.rgbToHex(this.model.material.uniforms.uLightTvColor.value),
+            "uLightPcColor": this.rgbToHex(this.model.material.uniforms.uLightPcColor.value),
+            "uLightDeskColor": this.rgbToHex(this.model.material.uniforms.uLightDeskColor.value),
+            "pcScreen": this.world.pcScreen.isVideoPlaying() ? 1 : 0,
+            "macScreen": this.world.macScreen.isVideoPlaying() ? 1 : 0
+        };
+    
         return JSON.stringify(status);
     }
+    rgbToHex(color) {
+        let rgb = (color.r * 255 << 16) + (color.g * 255 << 8) + color.b * 255;
+        let hex = Number(rgb).toString(16);
+        while (hex.length < 6) {
+            hex = "0" + hex;
+        }
+        return '#' + hex;
+    }
+        
     
 }
