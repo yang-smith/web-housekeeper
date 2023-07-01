@@ -133,7 +133,7 @@ export default class FloatingWindow {
     createWindow() {
         this.window = document.createElement('div');
         this.window.style.position = 'fixed';
-        this.window.style.bottom = '30px'; // 设置窗口在底部
+        this.window.style.bottom = '50px'; // 设置窗口在底部
         this.window.style.left = '50%'; // 设置窗口在中间
         this.window.style.transform = 'translateX(-50%)'; // 确保窗口在中间
         this.window.style.zIndex = '1000'; // 确保窗口在其他元素之上
@@ -174,7 +174,7 @@ export default class FloatingWindow {
     createCollapsibleWindow() {
         this.collapsible = document.createElement('div');
         this.collapsible.style.position = 'fixed';
-        this.collapsible.style.top = '40px'; // 设置窗口在顶部
+        this.collapsible.style.top = '60px'; // 设置窗口在顶部
         this.collapsible.style.left = '30px'; // 设置窗口在左侧
         this.collapsible.style.zIndex = '1000'; // 确保窗口在其他元素之上
         // this.collapsible.style.padding = '100px';
@@ -186,7 +186,7 @@ export default class FloatingWindow {
         // 创建一个展开/折叠按钮
         this.collapsibleButton = document.createElement('button');
         this.collapsibleButton.style.position = 'fixed';
-        this.collapsibleButton.style.top = '10px'; 
+        this.collapsibleButton.style.top = '30px'; 
         this.collapsibleButton.style.left = '10px'; 
         this.collapsibleButton.style.zIndex = '1000'; 
         this.collapsibleButton.textContent = '个人信息 ↓';
@@ -210,6 +210,7 @@ export default class FloatingWindow {
         });
         // 创建一个多行输入框
         this.inputbase = document.createElement('textarea');
+        this.inputbase.style.top = '70px';
         this.inputbase.style.width = '200px'; 
         this.inputbase.style.height = '250px'; 
         this.inputbase.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
