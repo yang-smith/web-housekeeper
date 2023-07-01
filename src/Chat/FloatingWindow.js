@@ -160,6 +160,7 @@ export default class FloatingWindow {
             // this.model.material.uniforms.uNightMix.value = parseFloat(this.input.value);
             this.sendQuestion();
         });
+        this.button.addEventListener('touchend', this.sendQuestion);
 
         // 将输入框和按钮添加到窗口中
         this.window.appendChild(this.input);
@@ -198,7 +199,15 @@ export default class FloatingWindow {
                 this.collapsibleButton.textContent = '个人信息 ↓';
             }
         });
-
+        this.collapsibleButton.addEventListener('touchend', () => {
+            if (this.collapsible.style.display === 'none') {
+                this.collapsible.style.display = 'block';
+                this.collapsibleButton.textContent = '个人信息 ↑';
+            } else {
+                this.collapsible.style.display = 'none';
+                this.collapsibleButton.textContent = '个人信息 ↓';
+            }
+        });
         // 创建一个多行输入框
         this.inputbase = document.createElement('textarea');
         this.inputbase.style.width = '200px'; 
