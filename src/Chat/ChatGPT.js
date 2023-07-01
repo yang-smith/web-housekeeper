@@ -83,7 +83,7 @@ action：检查所有智能设备的状态，，
 
 export async function submit(content) {
     // const apiUrl = "http://38.60.204.205:1200/api/chatmess";
-    const apiUrl = "https://vercel-serverless-housekeeper.vercel.app/api/chatmesg";
+    const apiUrl = "https://api.autumnriver.chat/api/chatmesg";
     const messages=[
         {"role": "system", "content": bcontent},
         {"role": "user", "content": content}
