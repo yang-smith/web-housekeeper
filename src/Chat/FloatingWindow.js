@@ -225,6 +225,12 @@ export default class FloatingWindow {
         this.inputbase.addEventListener('touchstart', (event) => {
             this.inputbase.focus();
         });
+        document.addEventListener('touchstart', (event) => {
+            if (event.target !== this.input) {
+                this.input.blur();
+            }
+        });
+        
         
         // 将输入框添加到可折叠窗口中
         this.collapsible.appendChild(this.inputbase);
