@@ -152,6 +152,10 @@ export default class FloatingWindow {
             // this.model.material.uniforms.uNightMix.value = parseFloat(event.target.value);
             this.sendQuestion();
         });
+        this.input.addEventListener('touchstart', (event) => {
+            this.input.focus();
+        });
+        
 
         // 创建一个发送按钮
         this.button = document.createElement('button');
@@ -218,6 +222,10 @@ export default class FloatingWindow {
         this.inputbase.style.resize = 'none'; // 禁止调整大小
         this.inputbase.textContent = '我是一个城市白领，我工作日每天八点起床，晚上一般11点睡觉。我工作需要使用电脑。';
 
+        this.inputbase.addEventListener('touchstart', (event) => {
+            this.inputbase.focus();
+        });
+        
         // 将输入框添加到可折叠窗口中
         this.collapsible.appendChild(this.inputbase);
 
