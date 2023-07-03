@@ -99,3 +99,16 @@ export async function submit(content) {
     }
 }
 
+export async function submitbase(content) {
+    // const apiUrl = "http://38.60.204.205:1200/api/chatmess";
+    const apiUrl = "https://api.autumnriver.chat/api/backend";
+    try {
+        const response = await axios.get(apiUrl, { params: { messages: JSON.stringify(content) } });
+        // 这里你可以处理响应数据
+        // console.log(response.data);
+        return response.data;
+    } catch (error) {
+        // 这里你可以处理错误
+        console.error(error);
+    }
+}

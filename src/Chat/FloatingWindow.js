@@ -1,4 +1,4 @@
-import {submit} from './ChatGPT.js'
+import {submit, submitbase} from './ChatGPT.js'
 import {marked} from 'marked';
 import Screen from '../Experience/Screen.js'
 import Experience from '../Experience/Experience.js'
@@ -45,14 +45,15 @@ export default class FloatingWindow {
     }
 
     async sendQuestion() {
-        var inputstr = "智能设备状态" + this.getAllDeviceStatus();
-        inputstr = inputstr + "。 额外信息：" + this.inputbase.textContent;
+        // var inputstr = "智能设备状态" + this.getAllDeviceStatus();
+        var inputstr = inputstr + "。 额外信息：" + this.inputbase.textContent;
         inputstr = inputstr + "。 主人说："+ this.input.value + "。请只输出json。";
         this.input.value = '';
         console.log(inputstr);
         console.log(this.getAllDeviceStatus());
         // 调用API并显示返回的内容
-        const answer = await submit(inputstr);
+        // const answer = await submit(inputstr);
+        const answer = await submitbase(inputstr);
         console.log(answer.message);
         if (answer) {
             this.showmessage(answer.message);
