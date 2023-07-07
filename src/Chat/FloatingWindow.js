@@ -29,6 +29,7 @@ export default class FloatingWindow {
         this.output.style.maxWidth = '80%';
         this.output.style.overflow = 'auto';
         this.output.style.cursor = 'move';
+        this.output.innerHTML = "我是一个智能AI管家 <br>  试着说：   我要睡觉了 <br>     现在八点了 <br> 我要出门了 <br>   我想要一个温暖的氛围   "
         document.body.appendChild(this.output);
 
         // 使元素可拖动
